@@ -1,0 +1,18 @@
+version: "3.8"
+name: clickhouse-service
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse
+    restart: unless-stopped
+    ports:
+      - "8123:8123"   # HTTP 接口
+      - "9000:9000"   # Native TCP 接口
+    environment:
+      CLICKHOUSE_DB: default
+      CLICKHOUSE_USER: abcd1234
+      CLICKHOUSE_PASSWORD: abcd1234
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: "1"
+    volumes:
+      - ./data:/var/lib/clickhouse
+      - ./logs:/var/log/clickhouse-server

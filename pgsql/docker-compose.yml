@@ -1,0 +1,18 @@
+version: "3.9"
+name: postgres-15
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres15
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: testdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
