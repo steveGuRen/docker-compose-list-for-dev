@@ -1,0 +1,19 @@
+[mysqld]
+# ========== binlog 核心配置（CDC必备）==========
+server-id = 100  # 唯一服务器ID（集群环境需唯一，单机随意非0值）
+log_bin = /var/lib/mysql/mysql-bin  # binlog日志文件路径
+binlog_format = ROW  # 必须为ROW格式（CDC工具依赖行级变更数据）
+binlog_row_image = FULL  # 记录完整行数据（避免字段缺失）
+binlog_expire_logs_seconds = 604800  # binlog保留7天（可根据需求调整）
+log_slave_updates = 1  # 允许从库同步binlog（CDC本质是模拟从库）
+
+# ========== CDC 优化配置 ==========
+gtid_mode = ON  # 启用GTID（可选，便于CDC断点续传）
+enforce_gtid_consistency = ON  # 强制GTID一致性
+binlog_row_metadata = FULL  # 记录列名等元数据（部分CDC工具需要）
+max_allowed_packet = 64M  # 增大数据包限制（避免大事务报错）
+
+# ========== 性能优化 ==========
+innodb_flush_log_at_trx_commit = 1  # ACID一致性（生产环境推荐）
+sync_binlog = 1  # binlog同步刷盘（避免数据丢失）
+lower_case_table_names = 1  # 表名不区分大小写（避免跨系统问题）

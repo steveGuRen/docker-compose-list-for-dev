@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mysql-cdc:
+    image: mysql:8.0.36
+    container_name: mysql-cdc
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123456  # 你的root密码
+      MYSQL_DATABASE: cdc_demo         # 初始化默认库
+      MYSQL_USER: cdc_user             # CDC专用账号
+      MYSQL_PASSWORD: cdc_password     # CDC账号密码
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    volumes:
+      # 数据持久化
+      - mysql-cdc-data:/var/lib/mysql
+      # 自定义binlog配置
+      - ./mysql-cdc.cnf:/etc/mysql/conf.d/mysql-cdc.cnf
+      # 挂载初始化脚本（关键：本地脚本 -> 容器指定目录）
+      - ./init-cdc-permissions.sql:/docker-entrypoint-initdb.d/init-cdc-permissions.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql-cdc-data:
