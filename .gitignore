@@ -1,0 +1,7 @@
+clickhouse/clickhouse/data/uuid
+clickhouse/clickhouse/logs/clickhouse-server.err.log
+clickhouse/clickhouse/logs/clickhouse-server.log
+clickhouse/data/status
+clickhouse/data/uuid
+clickhouse/logs/clickhouse-server.err.log
+clickhouse/logs/clickhouse-server.log
