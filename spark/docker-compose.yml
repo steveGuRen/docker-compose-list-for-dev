@@ -1,0 +1,26 @@
+# 参考文档：https://www.oryoy.com/news/shi-yong-docker-kuai-su-bu-shu-spark-huan-jing-jing-xiang-xia-zai-yu-pei-zhi-zhi-nan.html
+# 
+
+version: '3'
+name: spark-setup
+services:
+  spark-master:
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/bitnami/spark:latest
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    volumes:
+      - data:/tmp/data
+      - spark-ivy:/home/spark/.ivy2
+    environment:
+      - SPARK_MODE=master
+  spark-worker:
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/bitnami/spark:latest
+    volumes:
+      - data:/tmp/data
+      - spark-ivy:/home/spark/.ivy2
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_CORES=2
+      - SPARK_WORKER_MEMORY=2g
